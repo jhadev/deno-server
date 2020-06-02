@@ -10,9 +10,9 @@ import {
 const router = new Router();
 router
   .get('/people', getPeople)
-  .get('/people/:name', getPerson)
+  .get('/people/:id', getPerson)
   .post('/people', addPerson)
-  .put('/people/:name', updatePerson)
-  .delete('/people/:name', removePerson);
+  .put('/people/:id', updatePerson)
+  .delete('/people/:id', removePerson);
 
 export default router;
