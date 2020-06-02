@@ -1,3 +1,3 @@
 # deno-server
 
-deno run --allow-env --allow-net server.ts
+deno run --unstable --allow-read --allow-write --allow-env --allow-net server.ts
