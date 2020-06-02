@@ -1,8 +1,4 @@
-import { Person } from '../models/person.ts';
-import { readJson, writeJson } from 'https://deno.land/std/fs/mod.ts';
 import { users } from '../server.ts';
-
-// const db = './db.json';
 
 export const getPeople = async ({ response }: { response: any }) => {
   response.body = await users.find({});
@@ -54,31 +50,26 @@ export const updatePerson = async ({
   response,
 }: {
   params: {
-    name: string;
+    id: string;
   };
   request: any;
   response: any;
 }) => {
-  // const people = (await readJson(db)) as Person[];
-  // const body = await request.body();
-  // const { age }: { age: number } = body.value;
-  // if (!people.length) {
-  //   response.status = 400;
-  //   response.body = { msg: `Cannot find person ${params.name}` };
-  //   return;
-  // }
-  // const updated = people.map((person: Person) => {
-  //   if (person.name.toLowerCase() === params.name) {
-  //     person.age = age;
-  //   }
-  //   return person;
-  // });
-  // let res = updated.filter(
-  //   (person: Person) => person.name.toLowerCase() === params.name
-  // );
-  // await writeJson(db, updated, { spaces: 2 });
-  // response.status = 200;
-  // response.body = { msg: 'OK', data: res };
+  const body = await request.body();
+  const { name, age }: { name: string; age: number } = body.value;
+
+  const updatedUser = await users.updateOne(
+    { _id: { $oid: params.id } },
+    { $set: { name: name, age: age } }
+  );
+  if (!updatedUser) {
+    response.status = 400;
+    response.body = { msg: `Cannot find user with ObjectId ${params.id}` };
+    return;
+  }
+
+  response.status = 200;
+  response.body = { msg: 'OK', data: updatedUser };
 };
 
 export const removePerson = async ({
